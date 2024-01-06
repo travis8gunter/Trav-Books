@@ -1,0 +1,58 @@
+@import './var.scss';
+@import './menu.scss';
+@import './about.scss';
+@import './contact.scss';
+@import './home.scss';
+@import './footer.scss';
+
+// NavBar styles
+.nav-wrapper nav {
+  display: flex;
+  justify-content: space-around;
+  padding: 1em;
+  background-color: #f0f0f0;
+}
+
+.nav-wrapper nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.nav-wrapper nav .active {
+  color: blue;
+}
+
+
+// main theme styles
+
+body {
+  font-family: $font-primary;
+  background-color: $color-black;
+  color: $color-grey;
+  line-height: 1.6;
+}
+
+a {
+  color: $color-light-grey;
+  &:hover {
+    color: $color-white;
+  }
+}
+
+h1, h2, h3, h4 {
+  color: $color-white;
+}
+
+.additional-info {
+  margin-top: 20px;
+  padding: 0 15px;
+
+  p {
+    font-size: 1.1rem;
+    line-height: 1.6; // For better readability
+    text-align: justify;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}

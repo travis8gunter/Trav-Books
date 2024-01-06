@@ -1,0 +1,50 @@
+
+.about-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: center;
+    margin: 20px;
+  
+    .about-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px; 
+    }
+  
+    .about-text {
+      color: #fff; 
+      h2 {
+        margin-bottom: 15px;
+      }
+      p {
+        line-height: 1.5;
+      }
+    }
+  }
+  
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    .about-container {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .number-read {
+    margin-top: 20px;
+  
+    h3 {
+      margin-bottom: 10px;
+    }
+  
+    ul {
+      list-style-type: none;
+      padding: 0;
+  
+      li {
+        margin-bottom: 5px;
+      }
+    }
+  
+  }
+  
