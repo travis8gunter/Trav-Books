@@ -19,7 +19,7 @@ const Menu = () => {
   ];
 
   useEffect(() => {
-    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    console.log('API URL:', apiUrl);
     axios.get(`${apiUrl}/books`)
       .then(response => {
         setBooks(response.data);
