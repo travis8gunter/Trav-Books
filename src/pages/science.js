@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import scienceImage from '../images/si-fi.png';
 import '../cate-page.scss';
+import CategoryButtons from './categorybutton';
 
 const Science = () => {
   const [books, setBooks] = useState([]);
@@ -17,6 +18,7 @@ const Science = () => {
   return (
     <div>
       <img src={scienceImage} alt="Science" className="category-header-image" />
+      <CategoryButtons />
       <div className="books-grid">
         {books.map(book => (
           <div key={book.id} className="book-item">

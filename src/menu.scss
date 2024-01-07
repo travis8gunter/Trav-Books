@@ -1,10 +1,13 @@
 .menu-container {
   text-align: center; // Center-aligns content
 
-  .categories {
+  .category-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     margin: 20px 0;
 
-    .category-item {
+    button {
       margin: 5px;
       padding: 10px 15px;
       background-color: #007bff;
@@ -12,16 +15,17 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s, transform 0.2s;
 
       &:hover {
         background-color: #0056b3; // Darker shade on hover
+        transform: scale(1.05); // Slightly enlarges button on hover
+      }
+
+      &.active {
+        background-color: #0056b3; // Active state color
       }
     }
-  }
-
-  .header-image {
-    margin-bottom: 20px;
   }
 
   .search-bar {
@@ -41,6 +45,23 @@
       border-radius: 5px;
       cursor: pointer;
       transition: background-color 0.3s;
+    }
+  }
+
+  .books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    .book-item {
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 5px;
+      text-align: left;
+
+      h3 {
+        margin-top: 0;
+      }
     }
   }
 }

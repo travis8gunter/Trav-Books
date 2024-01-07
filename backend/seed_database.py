@@ -34,8 +34,9 @@ def add_books():
         {"title": "Clean Code", "author": "Robert C. Martin", "category": "Tech", "rating": 4.6},
         {"title": "The Pragmatic Programmer", "author": "Andrew Hunt and David Thomas", "category": "Tech", "rating": 4.6}
     ]
-
+#combine all books onto 1 list
     all_books = philosophy_books + history_books + science_books + tech_books
+#add books to database
     with app.app_context():
         for book in all_books:
             new_book = Book(title=book['title'], author=book['author'], category=book['category'], rating=book['rating'])

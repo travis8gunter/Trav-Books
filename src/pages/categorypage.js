@@ -6,12 +6,15 @@ const CategoryPage = () => {
   const [books, setBooks] = useState([]);
   const { category } = useParams();
 
-  useEffect(() => {
-    fetch(`http://127.0.0.1:5000/books/category/${category}`)
-      .then(response => response.json())
-      .then(data => setBooks(data))
-      .catch(error => console.error('Error fetching data:', error));
-  }, [category]);
+  // In CategoryPage.js (or similar)
+useEffect(() => {
+  axios.get(`http://localhost:5000/books/category/${category}`)
+    .then(response => {
+      setBooks(response.data); // Make sure this matches the response structure
+    })
+    .catch(error => console.error('Error fetching data:', error));
+}, [category]);
+
 
   return (
     <div className="category-container">

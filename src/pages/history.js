@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import historyImage from '../images/history-lib.png'; 
+import CategoryButtons from './categorybutton';
 
 const History = () => {
   const [books, setBooks] = useState([]);
@@ -16,6 +17,7 @@ const History = () => {
   return (
     <div>
       <img src={historyImage} alt="History" className="category-header-image" />
+      <CategoryButtons />
       <div className="books-grid">
         {books.map(book => (
           <div key={book.id} className="book-item">
