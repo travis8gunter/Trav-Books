@@ -1,5 +1,5 @@
 from app import app
-from extensions import db
+from .extensions import db
 from models import Book
 
 def add_books():
