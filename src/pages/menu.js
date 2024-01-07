@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../menu.scss';
 
+const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const Menu = () => {
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
