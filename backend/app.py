@@ -1,16 +1,22 @@
 from flask import Flask, request, jsonify, abort
 from flask_cors import CORS
 from backend.extensions import db
+from flask_migrate import Migrate
+import os
 
 
-from .models import Book
+from backend.models import Book
+
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///books.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///books.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///books.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)  # Initialize the database with the Flask app
 CORS(app)  # Enable Cross-Origin Resource Sharing
+migrate = Migrate(app, db)
+
 
 # API route to display a welcome message
 @app.route('/')
@@ -84,5 +90,5 @@ def bad_request(error):
     return jsonify(error=str(error)), 400
 
 # Run the Flask app
-if __name__ == '__main__':
-    app.run(debug=True)
+#if __name__ == '__main__':
+#    app.run(debug=True)
