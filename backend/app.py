@@ -8,7 +8,7 @@ import os
 from backend.models import Book
 from flask import send_from_directory
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='build')
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///books.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///books.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -18,11 +18,14 @@ CORS(app)  # Enable Cross-Origin Resource Sharing
 migrate = Migrate(app, db)
 
 
+# Serve React App
+@app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-def serve_static(path):
-    if path and os.path.exists("backend/build/" + path):
-        return send_from_directory('backend/build', path)
-    return send_from_directory('backend/build', 'index.html')
+def serve(path):
+    if path != "" and os.path.exists(app.static_folder + '/' + path):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
 
 # API route to display a welcome message
 @app.route('/')
