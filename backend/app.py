@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, abort
 from flask_cors import CORS
-from .extensions import db
+from extensions import db
 
 from models import Book
 
