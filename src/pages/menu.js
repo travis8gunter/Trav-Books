@@ -17,7 +17,8 @@ const Menu = () => {
   ];
 
   useEffect(() => {
-    axios.get('http://localhost:5000/books')
+    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    axios.get(`${apiUrl}/books`)
       .then(response => {
         setBooks(response.data);
         setFilteredBooks(response.data); // Initialize with all books
