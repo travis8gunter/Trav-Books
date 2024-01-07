@@ -6,7 +6,7 @@ import os
 
 
 from backend.models import Book
-
+from flask import send_from_directory
 
 app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///books.db'
@@ -17,6 +17,12 @@ db.init_app(app)  # Initialize the database with the Flask app
 CORS(app)  # Enable Cross-Origin Resource Sharing
 migrate = Migrate(app, db)
 
+
+@app.route('/<path:path>')
+def serve_static(path):
+    if path and os.path.exists("backend/build/" + path):
+        return send_from_directory('backend/build', path)
+    return send_from_directory('backend/build', 'index.html')
 
 # API route to display a welcome message
 @app.route('/')
