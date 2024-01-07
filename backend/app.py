@@ -28,9 +28,9 @@ def serve(path):
         return send_from_directory(app.static_folder, 'index.html')
 
 # API route to display a welcome message
-@app.route('/')
-def index():
-    return "Welcome to Trav's Library!"
+#@app.route('/')
+#def index():
+#    return "Welcome to Trav's Library!"
 
 # API route to add a new book
 @app.route('/add_book', methods=['POST'])
