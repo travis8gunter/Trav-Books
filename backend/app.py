@@ -3,7 +3,7 @@ from flask_cors import CORS
 from backend.extensions import db
 
 
-from models import Book
+from .models import Book
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///books.db'
