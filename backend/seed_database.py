@@ -1,7 +1,7 @@
-from app import app
-from backend.extensions import db
+from .app import app
+from .extensions import db
 
-from models import Book
+from .models import Book
 
 def add_books():
     philosophy_books = [
