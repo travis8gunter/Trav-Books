@@ -1,7 +1,8 @@
-from backend.app import app
-from backend.extensions import db
+#seed_database.py
+from app import app
+from extensions import db
 
-from backend.models import Book
+from models import Book
 
 def add_books():
     philosophy_books = [

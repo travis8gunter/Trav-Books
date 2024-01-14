@@ -1,11 +1,12 @@
+#app.py
 from flask import Flask, request, jsonify, abort
 from flask_cors import CORS
-from backend.extensions import db
+from extensions import db
 from flask_migrate import Migrate
 import os
 
 
-from backend.models import Book
+from models import Book
 from flask import send_from_directory
 
 app = Flask(__name__, static_folder='build')
@@ -99,5 +100,5 @@ def bad_request(error):
     return jsonify(error=str(error)), 400
 
 # Run the Flask app
-#if __name__ == '__main__':
-#    app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
