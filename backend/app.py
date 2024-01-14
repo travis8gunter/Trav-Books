@@ -1,7 +1,7 @@
 #app.py
 from flask import Flask, request, jsonify, abort
 from flask_cors import CORS
-from extensions import db
+from backend.extensions import db
 from flask_migrate import Migrate
 import os
 

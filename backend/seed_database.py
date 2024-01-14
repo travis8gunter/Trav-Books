@@ -1,6 +1,7 @@
 #seed_database.py
 from app import app
-from extensions import db
+from backend.extensions import db
+
 
 from models import Book
 
