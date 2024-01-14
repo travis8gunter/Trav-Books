@@ -1,24 +1,26 @@
 #app.py
-from flask import Flask, request, jsonify, abort
-from flask_cors import CORS
-from .extensions import db
-from flask_migrate import Migrate
-import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-
-
+from flask import Flask, request, jsonify, abort, send_from_directory
+from flask_cors import CORS
+from flask_migrate import Migrate
+from .extensions import db
 from .models import Book
-from flask import send_from_directory
 
 app = Flask(__name__, static_folder='build')
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///books.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///books.db')
+
+# Database configuration
+uri = os.getenv('DATABASE_URL')  # Get DATABASE_URL environment variable
+if uri and uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)  # Fix the URI for SQLAlchemy
+else:
+    uri = 'sqlite:///books.db'  # Fallback to SQLite for local development
+
+app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db.init_app(app)  # Initialize the database with the Flask app
-CORS(app)  # Enable Cross-Origin Resource Sharing
+# Initialize extensions
+db.init_app(app)
+CORS(app)
 migrate = Migrate(app, db)
 
 
