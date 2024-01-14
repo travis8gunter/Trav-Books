@@ -3,10 +3,13 @@ from flask import Flask, request, jsonify, abort
 from flask_cors import CORS
 from backend.extensions import db
 from flask_migrate import Migrate
+import sys
 import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
-from backend.models import Book
+
+from .models import Book
 from flask import send_from_directory
 
 app = Flask(__name__, static_folder='build')
