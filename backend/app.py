@@ -6,7 +6,7 @@ from flask_migrate import Migrate
 import os
 
 
-from models import Book
+from backend.models import Book
 from flask import send_from_directory
 
 app = Flask(__name__, static_folder='build')
