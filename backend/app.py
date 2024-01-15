@@ -3,107 +3,105 @@ import os
 from flask import Flask, request, jsonify, abort, send_from_directory
 from flask_cors import CORS
 from flask_migrate import Migrate
-from .extensions import db
-from .models import Book
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
-app = Flask(__name__, static_folder='build')
+# Initialize Flask extensions
+db = SQLAlchemy()
 
-# Database configuration
-uri = os.getenv('DATABASE_URL')  # Get DATABASE_URL environment variable
-if uri and uri.startswith("postgres://"):
-    uri = uri.replace("postgres://", "postgresql://", 1)  # Fix the URI for SQLAlchemy
-else:
-    uri = 'sqlite:///books.db'  # Fallback to SQLite for local development
+# Define models
+class Book(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    author = db.Column(db.String(100), nullable=False)
+    rating = db.Column(db.Float, nullable=False)
+    category = db.Column(db.String(100), nullable=False)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = uri
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    def __repr__(self):
+        return f"<Book {self.title}, Author: {self.author}, Rating: {self.rating}>"
 
-# Initialize extensions
-db.init_app(app)
-CORS(app)
-migrate = Migrate(app, db)
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128))
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+# Create Flask app
+def create_app():
+    app = Flask(__name__, static_folder='../build')
+
+    # Database configuration
+    uri = os.getenv('DATABASE_URL', 'sqlite:///local.db')
+    if uri.startswith("postgres://"):
+        uri = uri.replace("postgres://", "postgresql://", 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = uri
+
+    db.init_app(app)
+    migrate = Migrate(app, db)
+    CORS(app)
+
+    # Create tables if they don't exist
+    @app.before_first_request
+    def create_tables():
+        db.create_all()
+
+    # Define routes
+    @app.route('/', defaults={'path': ''})
+    @app.route('/<path:path>')
+    def serve(path):
+        if path != "" and os.path.exists(app.static_folder + '/' + path):
+            return send_from_directory(app.static_folder, path)
+        else:
+            return send_from_directory(app.static_folder, 'index.html')
+
+    @app.route('/add_book', methods=['POST'])
+    def add_book():
+        data = request.get_json()
+        new_book = Book(title=data['title'], author=data['author'], 
+                        rating=data['rating'], category=data['category'])
+        db.session.add(new_book)
+        db.session.commit()
+        return jsonify({'message': 'Book added successfully!'}), 201
+
+    @app.route('/books', methods=['GET'])
+    def get_books():
+        books = Book.query.all()
+        return jsonify([{'title': book.title, 'author': book.author, 
+                         'rating': book.rating, 'category': book.category} 
+                        for book in books]), 200
+
+    @app.route('/books/<int:book_id>', methods=['PUT'])
+    def update_book(book_id):
+        data = request.get_json()
+        book = Book.query.get_or_404(book_id)
+        book.title = data.get('title', book.title)
+        book.author = data.get('author', book.author)
+        book.rating = data.get('rating', book.rating)
+        book.category = data.get('category', book.category)
+        db.session.commit()
+        return jsonify({'message': 'Book updated successfully'}), 200
 
 
-# Serve React App
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def serve(path):
-    if path != "" and os.path.exists(app.static_folder + '/' + path):
-        return send_from_directory(app.static_folder, path)
-    else:
-        return send_from_directory(app.static_folder, 'index.html')
+    @app.route('/books/<int:book_id>', methods=['DELETE'])
+    def delete_book(book_id):
+        book = Book.query.get_or_404(book_id)
+        db.session.delete(book)
+        db.session.commit()
+        return jsonify({'message': 'Book deleted successfully'}), 200
 
-# API route to display a welcome message
-#@app.route('/')
-#def index():
-#    return "Welcome to Trav's Library!"
+    @app.route('/categories', methods=['GET'])
+    def get_categories():
+        categories = {book.category for book in Book.query.all()}
+        return jsonify(list(categories)), 200
 
-# API route to add a new book
-@app.route('/add_book', methods=['POST'])
-def add_book():
-    data = request.json
-    # Validate that all required fields are in the request
-    if not data or 'title' not in data or 'author' not in data or 'rating' not in data or 'category' not in data:
-        abort(400, description="Missing book data")
-    # Validate data types
-    if not isinstance(data['title'], str) or not isinstance(data['author'], str):
-        abort(400, description="Invalid data type for title or author")
-    # Create a new book and add it to the database
-    new_book = Book(title=data['title'], author=data['author'], rating=data['rating'], category=data['category'])
-    db.session.add(new_book)
-    db.session.commit()
-    return jsonify({'message': 'Book added successfully!'}), 201
+    return app
 
-# API route to get all books
-@app.route('/books', methods=['GET'])
-def get_books():
-    books = Book.query.all()  # Retrieve all books from the database
-    books_data = [{'title': book.title, 'author': book.author, 'rating': book.rating, 'category': book.category} for book in books]
-    return jsonify(books_data)
-
-# API route to get categories
-@app.route('/categories', methods=['GET'])
-def get_categories():
-    categories = ['History', 'Science', 'Tech', 'Philosophy']
-    return jsonify([{'name': category} for category in categories])
-
-# API route to get books by a specific category
-@app.route('/books/category/<category_name>', methods=['GET'])
-def get_books_by_category(category_name):
-    books = Book.query.filter_by(category=category_name).all()
-    books_data = [{'id': book.id, 'title': book.title, 'author': book.author, 'rating': book.rating} for book in books]
-    return jsonify(books_data)
-
-# API route to update a book's details
-@app.route('/books/<int:book_id>', methods=['PUT'])
-def update_book(book_id):
-    data = request.json
-    book = Book.query.get(book_id)  # Retrieve the book to update
-    if not book:
-        return jsonify({'message': 'Book not found'}), 404
-    # Update the book's details
-    book.title = data.get('title', book.title)
-    book.author = data.get('author', book.author)
-    book.rating = data.get('rating', book.rating)
-    book.category = data.get('category', book.category)
-    db.session.commit()
-    return jsonify({'id': book.id, 'title': book.title, 'author': book.author, 'rating': book.rating, 'category': book.category})
-
-# API route to delete a book
-@app.route('/books/<int:book_id>', methods=['DELETE'])
-def delete_book(book_id):
-    book = Book.query.get(book_id)  # Retrieve the book to delete
-    if not book:
-        return jsonify({'message': 'Book not found'}), 404
-    db.session.delete(book)  # Delete the book from the database
-    db.session.commit()
-    return jsonify({'message': 'Book deleted'})
-
-# Error handler for bad requests
-@app.errorhandler(400)
-def bad_request(error):
-    return jsonify(error=str(error)), 400
-
-# Run the Flask app
+# Instantiate and run the Flask application
+app = create_app()
 if __name__ == '__main__':
     app.run(debug=True)

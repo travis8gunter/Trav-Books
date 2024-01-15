@@ -1,9 +1,5 @@
 #seed_database.py
-from app import app
-from .extensions import db
-
-
-from .models import Book
+from app import create_app, db, Book
 
 def add_books():
     philosophy_books = [
@@ -40,11 +36,10 @@ def add_books():
 #combine all books onto 1 list
     all_books = philosophy_books + history_books + science_books + tech_books
 #add books to database
-    with app.app_context():
+    with create_app().app_context():
         for book in all_books:
             new_book = Book(title=book['title'], author=book['author'], category=book['category'], rating=book['rating'])
             db.session.add(new_book)
-
         db.session.commit()
 
 if __name__ == "__main__":
