@@ -9,6 +9,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # Initialize Flask extensions
 db = SQLAlchemy()
 
+
+
 # Define models
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -34,6 +36,8 @@ class User(db.Model):
 # Create Flask app
 def create_app():
     app = Flask(__name__, static_folder='../build')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
     # Database configuration
     uri = os.getenv('DATABASE_URL', 'sqlite:///local.db')
