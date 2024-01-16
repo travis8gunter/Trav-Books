@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import '../home.scss';
 
@@ -18,13 +19,13 @@ const Home = () => {
         <h1>Welcome to Trav's Library</h1>
       </div>
       <div className="categories-container">
-        {categories.map(category => (
-          <div key={category.name} className="category-box">
-            <a href={`/category/${category.name}`}>{category.name}</a>
-            <p className="category-description">{category.description}</p>
-          </div>
-        ))}
-      </div>
+  {categories.map(category => (
+    <div key={category.name} className="category-box">
+      <Link to={`/category/${category.name}`}>{category.name}</Link>
+      <p className="category-description">{category.description}</p>
+    </div>
+  ))}
+</div>
       <div className="additional-info">
         <p>
           Explore our extensive collection of books across multiple genres. From historical insights to 
