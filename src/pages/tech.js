@@ -9,7 +9,7 @@ const Tech = () => {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    axios.get(`${apiUrl}/books/category/Tech`)
+    axios.get(`${apiUrl}/category/Tech`)
       .then(response => {
         setBooks(response.data);
       })

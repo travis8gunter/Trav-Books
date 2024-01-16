@@ -8,7 +8,7 @@ const History = () => {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    axios.get(`${apiUrl}/books/category/History`)
+    axios.get(`${apiUrl}/category/History`)
       .then(response => {
         setBooks(response.data);
       })

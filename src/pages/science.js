@@ -9,7 +9,7 @@ const Science = () => {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    axios.get(`${apiUrl}/books/category/Science`)
+    axios.get(`${apiUrl}/category/Science`)
 
       .then(response => {
         setBooks(response.data);
