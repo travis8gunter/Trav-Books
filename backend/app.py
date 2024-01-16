@@ -43,7 +43,9 @@ def create_app():
 
     db.init_app(app)
     migrate = Migrate(app, db)
-    CORS(app, resources={r"/*": {"origins": "https://trav-books-d81f55bff5ac.herokuapp.com/"}})
+    origins = ["https://trav-books-d81f55bff5ac.herokuapp.com", "http://localhost:3000"]
+    CORS(app, resources={r"/*": {"origins": origins}})
+
 
     # Create tables if they don't exist
     @app.before_first_request
