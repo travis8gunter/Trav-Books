@@ -7,7 +7,7 @@ const Philosophy = () => {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/books/category/Philosophy`)
+    axios.get(`${apiUrl}/books/category/Philosophy`)
 
       .then(response => {
         setBooks(response.data);

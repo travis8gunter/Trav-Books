@@ -8,7 +8,7 @@ const CategoryPage = () => {
 
   // In CategoryPage.js (or similar)
 useEffect(() => {
-  axios.get(`https://trav-books-d81f55bff5ac.herokuapp.com/${category}`)
+  axios.get(`${apiUrl}/books/category/$category}`)
     .then(response => {
       setBooks(response.data); // Make sure this matches the response structure
     })

@@ -8,7 +8,7 @@ const Tech = () => {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/books/category/Tech`)
+    axios.get(`${apiUrl}/books/category/Tech`)
       .then(response => {
         setBooks(response.data);
       })

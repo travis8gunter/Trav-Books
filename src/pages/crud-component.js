@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../crud-component.scss'; // Importing the SCSS file for styling
+const apiUrl = process.env.REACT_APP_API_URL || '//trav-books-d81f55bff5ac.herokuapp.com';
 
 const CrudComponent = () => {
     // State for storing books list and form data
@@ -15,7 +16,7 @@ const CrudComponent = () => {
     // Function to fetch books from the backend
     const fetchBooks = async () => {
         try {
-            const response = await axios.get('https://trav-books-d81f55bff5ac.herokuapp.com/books');
+            const response = await axios.get(`${apiUrl}/books`);
             setBooks(response.data);
         } catch (error) {
             console.error('Error fetching books:', error);
@@ -33,10 +34,10 @@ const CrudComponent = () => {
         try {
             if (formData.id) {
                 // Update book if formData has an id
-                await axios.put(`http://localhost:5000/books/${formData.id}`, formData);
+                await axios.put(`${apiUrl}/${formData.id}`, formData);
             } else {
                 // Add a new book if formData doesn't have an id
-                await axios.post('http://localhost:5000/add_book', formData);
+                await axios.post(`${apiUrl}/add_book`, formData);
             }
             fetchBooks(); // Refresh the books list
             setFormData({ title: '', author: '', rating: '', category: '' }); // Reset form fields
@@ -53,7 +54,7 @@ const CrudComponent = () => {
     // Handles the deletion of a book
     const handleDelete = async (bookId) => {
         try {
-            await axios.delete(`http://localhost:5000/books/${bookId}`);
+            await axios.delete(`${apiUrl}/books/${bookId}`);
             fetchBooks(); // Refresh the books list
         } catch (error) {
             console.error('Error deleting book:', error);
