@@ -6,11 +6,11 @@ const CategoryPage = () => {
   const [books, setBooks] = useState([]);
   const { category } = useParams();
 
-  // In CategoryPage.js (or similar)
+  // In CategoryPage.js
 useEffect(() => {
   axios.get(`${apiUrl}/books/category/$category}`)
     .then(response => {
-      setBooks(response.data); // Make sure this matches the response structure
+      setBooks(response.data);
     })
     .catch(error => console.error('Error fetching data:', error));
 }, [category]);
