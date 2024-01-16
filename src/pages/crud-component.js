@@ -15,7 +15,7 @@ const CrudComponent = () => {
     // Function to fetch books from the backend
     const fetchBooks = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/books');
+            const response = await axios.get('https://trav-books-d81f55bff5ac.herokuapp.com/books');
             setBooks(response.data);
         } catch (error) {
             console.error('Error fetching books:', error);
