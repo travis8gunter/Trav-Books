@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import philosophyImage from '../images/phil-header.png'; 
 import CategoryButtons from './categorybutton';
+const apiUrl = process.env.REACT_APP_API_URL || 'https://trav-books-d81f55bff5ac.herokuapp.com/';
 
 const Philosophy = () => {
   const [books, setBooks] = useState([]);

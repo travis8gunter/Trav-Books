@@ -3,6 +3,7 @@ import axios from 'axios';
 import scienceImage from '../images/si-fi.png';
 import '../cate-page.scss';
 import CategoryButtons from './categorybutton';
+const apiUrl = process.env.REACT_APP_API_URL || 'https://trav-books-d81f55bff5ac.herokuapp.com/';
 
 const Science = () => {
   const [books, setBooks] = useState([]);

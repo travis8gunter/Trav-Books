@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import historyImage from '../images/history-lib.png'; 
 import CategoryButtons from './categorybutton';
+const apiUrl = process.env.REACT_APP_API_URL || 'https://trav-books-d81f55bff5ac.herokuapp.com/';
 
 const History = () => {
   const [books, setBooks] = useState([]);
