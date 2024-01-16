@@ -8,7 +8,8 @@ const Science = () => {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/books/category/Science')
+    axios.get(`${process.env.REACT_APP_API_URL}/books/category/Science`)
+
       .then(response => {
         setBooks(response.data);
       })

@@ -7,7 +7,7 @@ const History = () => {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/books/category/History')
+    axios.get(`${process.env.REACT_APP_API_URL}/books/category/History`)
       .then(response => {
         setBooks(response.data);
       })
