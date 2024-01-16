@@ -98,6 +98,14 @@ def create_app():
     def get_categories():
         categories = {book.category for book in Book.query.all()}
         return jsonify(list(categories)), 200
+    
+    @app.route('/category/<category_name>', methods=['GET'])
+    def get_books_by_category(category_name):
+        books = Book.query.filter_by(category=category_name).all()
+        return jsonify([{'title': book.title, 'author': book.author,
+                     'rating': book.rating, 'category': book.category}
+                    for book in books]), 200
+
 
     return app
 
